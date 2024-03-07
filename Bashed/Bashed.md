@@ -36,7 +36,7 @@ Operating System : Linux
  - version : Apache httpd 2.4.18 ((Ubuntu))
 
 Site : 
-![Pasted image 20230822151105.png]
+![Site Image](Pasted image 20230822151105.png)
 General information about php bash on site .
 
 after some enumeration we find out that php bash is implemented on this system as well .
